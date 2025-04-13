@@ -12,44 +12,72 @@
     <body >
         <div class="calculator" x-data="calculator()">
             <div class="calculator__display">
-                <div class="calculator__result" x-text="result"></div>
+                <div class="calculator__result" x-text="mode === 'graph' ? displayLabel : result"></div>
                 <div class="calculator__input" x-text="currentInput"></div>
-                <div class="calculator__status" x-text="operation"></div>
+                <div class="calculator__status" x-text="mode"></div>
             </div>
-            <div class="calculator__keys">
-                <button class="calculator__key--function" @click="clearAll()">AC</button>
-                <button class="calculator__key--function" @click="toggleSign()">±</button>
-                <button class="calculator__key--function" @click="calculatePercentage()">%</button>
-                <button class="calculator__key--operation" @click="inputOperation('/')">÷</button>
-
-                <button @click="inputDigit('7')">7</button>
-                <button @click="inputDigit('8')">8</button>
-                <button @click="inputDigit('9')">9</button>
-                <button class="calculator__key--operation" @click="inputOperation('*')">×</button>
-
-                <button @click="inputDigit('4')">4</button>
-                <button @click="inputDigit('5')">5</button>
-                <button @click="inputDigit('6')">6</button>
-                <button class="calculator__key--operation" @click="inputOperation('-')">−</button>
-
-                <button @click="inputDigit('1')">1</button>
-                <button @click="inputDigit('2')">2</button>
-                <button @click="inputDigit('3')">3</button>
-                <button class="calculator__key--operation" @click="inputOperation('+')">+</button>
-
-                <button @click="inputDigit('0')" class="calculator__key--double">0</button>
-                <button @click="inputDecimal()">.</button>
-                <button class="calculator__key--operation" @click="calculate()">=</button>
-            </div>
-            <div x-data="lineGraph()">
-                <input type="number" placeholder="X value" x-model.number="xVal">
-                <input type="number" placeholder="Y value" x-model.number="yVal">
-                <div class="calculator__keys">
-                    <button class="calculator__key--graph" @click="addPoint()">Add</button>
-                    <button class="calculator__key--graph" @click="drawGraph()">Draw</button>
+            <template x-if="showGraph">
+                <div style="margin-top: 20px;">
+                    <canvas id="graphCanvas" width="300" height="200"></canvas>
                 </div>
-                <canvas id="graphCanvas" width="300" height="200" style="margin-top: 20px;"></canvas>
-            </div>
+            </template>
+            <template x-if="mode === 'calc'">
+                <div class="calculator__keys">
+                    <button class="calculator__key--mode" @click="toggleMode()">
+                        <img src="assets/loop.svg" alt="Mode" width="30" height="30" />
+                    </button>
+                    <button class="calculator__key--function" @click="clearAll()">AC</button>
+                    <button class="calculator__key--function" @click="toggleSign()">±</button>
+                    <button class="calculator__key--function" @click="calculatePercentage()">%</button>
+                    <button @click="inputDigit('7')">7</button>
+                    <button @click="inputDigit('8')">8</button>
+                    <button @click="inputDigit('9')">9</button>
+                    <button class="calculator__key--operation" @click="inputOperation('/')">÷</button>
+
+                    <button @click="inputDigit('4')">4</button>
+                    <button @click="inputDigit('5')">5</button>
+                    <button @click="inputDigit('6')">6</button>
+                    <button class="calculator__key--operation" @click="inputOperation('*')">×</button>
+
+                    <button @click="inputDigit('1')">1</button>
+                    <button @click="inputDigit('2')">2</button>
+                    <button @click="inputDigit('3')">3</button>
+                    <button class="calculator__key--operation" @click="inputOperation('-')">−</button>
+
+                    <button @click="inputDigit('0')">0</button>
+                    <button @click="inputDecimal()">.</button>
+                    <button class="calculator__key--operation" @click="calculate()">=</button>
+                    <button class="calculator__key--operation" @click="inputOperation('+')">+</button>
+
+
+
+                </div>
+            </template>
+            <template x-if="mode === 'graph'">
+                <div class="calculator__keys">
+                    <button class="calculator__key--mode" @click="toggleMode()">
+                        <img src="assets/loop.svg" alt="Mode" width="30" height="30" />
+                    </button>
+                    <button class="calculator__key--function" @click="addGraphInput()">+</button>
+                    <button class="calculator__key--function" @click="drawGraph()">
+                        <img src="assets/line.svg" alt="Draw" width="30" height="30" />
+                    </button>
+                    <button class="calculator__key--function" @click="resetGraph()">
+                        <img src="assets/reset.svg" alt="Reset" width="30" height="30" />
+                    </button>
+                    <button @click="inputDigit('7')">7</button>
+                    <button @click="inputDigit('8')">8</button>
+                    <button class="calculator__key--double" @click="inputDigit('9')">9</button>
+                    <button @click="inputDigit('4')">4</button>
+                    <button @click="inputDigit('5')">5</button>
+                    <button class="calculator__key--double" @click="inputDigit('6')">6</button>
+                    <button @click="inputDigit('1')">1</button>
+                    <button @click="inputDigit('2')">2</button>
+                    <button class="calculator__key--double" @click="inputDigit('3')">3</button>
+                    <button @click="inputDigit('0')">0</button>
+                    <button @click="inputDecimal()">.</button>
+                </div>
+            </template>
         </div>
     </body>
     </html>
