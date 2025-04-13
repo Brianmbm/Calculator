@@ -66,6 +66,7 @@
     grid-column: span 2;
 }
 
+
 .calculator__keys button.calculator__key--tall {
     grid-row: span 2;
 }
@@ -89,6 +90,22 @@
     color: white;
     grid-column: span 2;
 }
+
+.calculator__keys button.calculator__key--graph {
+    grid-column: span 2;
+    background-color: #ff9500;
+}
+
+.graph-section {
+    max-width: 265px;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin: 50px auto;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .graph-section input {
     margin: 5px;
     padding: 5px;

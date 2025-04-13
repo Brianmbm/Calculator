@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Calculator</title>
         <link rel="stylesheet" href="styles.css">
-        <script defer src="calculator.js"></script>
+        <script defer src="calculator.js?v=1.0.1"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
@@ -41,13 +41,13 @@
                 <button @click="inputDecimal()">.</button>
                 <button class="calculator__key--operation" @click="calculate()">=</button>
             </div>
-            <div class="graph-section" x-data="lineGraph()" style="margin-top: 40px;">
-                <h2>Line Graph Plotter</h2>
+            <div x-data="lineGraph()">
                 <input type="number" placeholder="X value" x-model.number="xVal">
                 <input type="number" placeholder="Y value" x-model.number="yVal">
-                <button @click="addPoint()">Add Point</button>
-                <button @click="drawGraph()">Draw Graph</button>
-            
+                <div class="calculator__keys">
+                    <button class="calculator__key--graph" @click="addPoint()">Add</button>
+                    <button class="calculator__key--graph" @click="drawGraph()">Draw</button>
+                </div>
                 <canvas id="graphCanvas" width="300" height="200" style="margin-top: 20px;"></canvas>
             </div>
         </div>

@@ -13,7 +13,7 @@ This project is a simple calculator built using Alpine.js, HTML, and CSS.
 To use this calculator, you can serve the files using a simple HTTP server. For example, if you have Python installed, you can use the following command, using Python's built-in HTTP server:
 
 ```bash
-python3 -m http.server 8000
+    python3 -m http.server 8000
 ```
 
 Then, you can open the calculator in your browser by navigating to `http://localhost:8000/`.
