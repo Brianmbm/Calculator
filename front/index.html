@@ -19,8 +19,8 @@
             </div>
             </template>
             <template x-if="showGraph">
-                <div class="graph__section">
-                    <canvas id="graphCanvas" width="325" height="168"></canvas>
+                <div class="calculator__display">
+                    <canvas id="graphCanvas" class="graph__section"></canvas>
                     <div id="interceptInfo" class="intercept__info" style="margin-top: 0.5rem; font-size: 0.9rem;"></div>                </div>
             </template>
             <template x-if="mode === 'calc'">
@@ -63,16 +63,13 @@
                     <button class="calculator__key--function" @click="resetGraph()">AC</button>
                     <button class="calculator__key--doublefunc" @click="toggleSign()">±</button>
 
-
                     <button @click="inputDigit('7')">7</button>
                     <button @click="inputDigit('8')">8</button>
                     <button class="calculator__key--double" @click="inputDigit('9')">9</button>
-                    
 
                     <button @click="inputDigit('4')">4</button>
                     <button @click="inputDigit('5')">5</button>
                     <button class="calculator__key--double" @click="inputDigit('6')">6</button>
-
 
                     <button @click="inputDigit('1')">1</button>
                     <button @click="inputDigit('2')">2</button>

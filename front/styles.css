@@ -107,12 +107,13 @@
 }
 
 .graph__section {
-    color: white;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #222;
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    position: relative;
+    height: 80%;
+}
+
+
+
+
+.intercept__info {
+    height: 20%;
 }
 

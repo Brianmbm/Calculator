@@ -1,3 +1,4 @@
+//TODO: When adding last y-point it should be enough to click on draw not have to click plus and then draw
 function calculator() {
     return {
         mode: 'calc',
@@ -23,8 +24,7 @@ function calculator() {
             this.result = '';
             this.operation = null;
             this.previousKey = '';
-            this.displayLabel = 'x:';
-            this.nextCoordinate = 'x';
+            this.resetGraph();
         },
 
         inputDigit(digit) {
@@ -62,7 +62,7 @@ function calculator() {
         calculatePercentage() {
             const current = parseFloat(this.currentInput);
             if (isNaN(current)) return;
-        
+
             fetch('http://127.0.0.1:5000/percentage', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -74,17 +74,17 @@ function calculator() {
                     alert(data.error);
                     return;
                 }
-        
+
                 let result = data.result;
                 const maxDigits = 10;
-        
+
                 if (result.toString().length > maxDigits || result === 0) {
                     result = result.toExponential(3);
                 } else {
                     const decimalPlaces = maxDigits - Math.floor(result).toString().length;
                     result = parseFloat(result.toFixed(decimalPlaces < 0 ? 0 : decimalPlaces));
                 }
-        
+
                 this.currentInput = String(result);
                 this.result = this.currentInput;
                 this.previousKey = 'percentage';
@@ -158,7 +158,7 @@ function calculator() {
                 alert('At least two points are required for regression');
                 return;
             }
-        
+
             return fetch('http://127.0.0.1:5000/regression', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -182,15 +182,10 @@ function calculator() {
         },
         drawGraph() {
             this.showGraph = true;
-        
             Alpine.nextTick(() => {
                 const ctx = document.getElementById('graphCanvas')?.getContext('2d');
-                //ctx.clearRect(0, 0, canvas.width, canvas.height);
                 if (!ctx) return alert('Canvas not found');
                 const sortedPoints = [...this.graphPoints].sort((a, b) => a.x - b.x);
-
-
-
                 const data = {
                     datasets: [{
                         data: sortedPoints,
@@ -198,10 +193,11 @@ function calculator() {
                         backgroundColor: 'rgba(250, 250, 250, 0.2)',
                         fill: false,
                         tension: 0.2
-                    }], 
+                    }],
                 };
                 if (this.chart) {
                     this.chart.destroy();
+                    this.chart = null;
                 }
                 this.chart = new Chart(ctx, {
                     type: 'line',
@@ -246,17 +242,19 @@ function calculator() {
             });
         },
         resetGraph() {
-            this.points = [];
-            this.xVal = '';
-            this.yVal = '';
-            //const ctx = document.getElementById('graphCanvas')?.getContext('2d');
-            //ctx.clearRect(0, 0, canvas.width, canvas.height);
-            this.showGraph = false;
 
             if (this.chart) {
                 this.chart.destroy();
                 this.chart = null;
             }
+
+            this.graphPoints = [];
+            this.tempX = null;
+            this.nextCoordinate = 'x';
+            this.displayLabel = 'x:';
+            this.showGraph = false;
+            const interceptEl = document.getElementById("interceptInfo");
+            if (interceptEl) interceptEl.textContent = '';
         }
     }
 }
