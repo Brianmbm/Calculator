@@ -60,11 +60,38 @@ function calculator() {
         },
 
         calculatePercentage() {
-            if (this.currentInput) {
-                this.currentInput = String(parseFloat(this.currentInput) / 100);
+            const current = parseFloat(this.currentInput);
+            if (isNaN(current)) return;
+        
+            fetch('http://127.0.0.1:5000/percentage', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ value: current })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+        
+                let result = data.result;
+                const maxDigits = 10;
+        
+                if (result.toString().length > maxDigits || result === 0) {
+                    result = result.toExponential(3);
+                } else {
+                    const decimalPlaces = maxDigits - Math.floor(result).toString().length;
+                    result = parseFloat(result.toFixed(decimalPlaces < 0 ? 0 : decimalPlaces));
+                }
+        
+                this.currentInput = String(result);
                 this.result = this.currentInput;
-            }
-            this.previousKey = 'percentage';
+                this.previousKey = 'percentage';
+            })
+            .catch(err => {
+                alert('Server error: ' + err.message);
+            });
         },
 
         calculate() {
@@ -126,23 +153,52 @@ function calculator() {
 
             this.currentInput = '0';
         },
-
+        calculateRegressionLine() {
+            if (this.graphPoints.length < 2) {
+                alert('At least two points are required for regression');
+                return;
+            }
+        
+            return fetch('http://127.0.0.1:5000/regression', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ points: this.graphPoints })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    return null;
+                }
+                return {
+                    xIntercept: data.xIntercept,
+                    yIntercept: data.yIntercept
+                };
+            })
+            .catch(err => {
+                alert('Server error: ' + err.message);
+                return null;
+            });
+        },
         drawGraph() {
             this.showGraph = true;
         
             Alpine.nextTick(() => {
                 const ctx = document.getElementById('graphCanvas')?.getContext('2d');
+                //ctx.clearRect(0, 0, canvas.width, canvas.height);
                 if (!ctx) return alert('Canvas not found');
                 const sortedPoints = [...this.graphPoints].sort((a, b) => a.x - b.x);
+
+
+
                 const data = {
                     datasets: [{
-                        label: 'Line Graph',
                         data: sortedPoints,
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgb(236, 236, 236)',
+                        backgroundColor: 'rgba(250, 250, 250, 0.2)',
                         fill: false,
                         tension: 0.2
-                    }]
+                    }], 
                 };
                 if (this.chart) {
                     this.chart.destroy();
@@ -151,22 +207,41 @@ function calculator() {
                     type: 'line',
                     data: data,
                     options: {
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: () => null
+                                }
+                            }
+                        },
                         scales: {
                             x: {
                                 type: 'linear',
                                 title: {
-                                    display: true,
+                                    display: false,
                                     text: 'X Axis'
                                 }
                             },
                             y: {
                                 title: {
-                                    display: true,
+                                    display: false,
                                     text: 'Y Axis'
                                 }
                             }
                         }
                     }
+                });
+                this.calculateRegressionLine().then((res) => {
+                    if (!res) return;
+                    const { xIntercept, yIntercept } = res;
+                    const interceptDiv = document.getElementById('interceptInfo');
+                    interceptDiv.innerHTML = `
+                        <strong>y-intercept:</strong> ${yIntercept.toFixed(2)}<br>
+                        <strong>x-intercept:</strong> ${xIntercept !== null ? xIntercept.toFixed(2) : 'undefined'}
+                    `;
                 });
             });
         },
@@ -174,6 +249,8 @@ function calculator() {
             this.points = [];
             this.xVal = '';
             this.yVal = '';
+            //const ctx = document.getElementById('graphCanvas')?.getContext('2d');
+            //ctx.clearRect(0, 0, canvas.width, canvas.height);
             this.showGraph = false;
 
             if (this.chart) {

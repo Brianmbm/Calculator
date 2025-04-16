@@ -14,6 +14,7 @@
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 20px;
+    height: 150px;
     position: relative;
 }
 
@@ -95,42 +96,23 @@
     grid-column: span 2;
 }
 
-.calculator__keys button.calculator__key--graph {
-    background-color: #ff9500;
+.calculator__keys button.calculator__key--doublefunc {
+    background-color: #d4d4d2;
+    color: #000;
     grid-column: span 2;
 }
 
+.filter__white {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(343deg) brightness(102%) contrast(101%);
+}
 
-
-.graph-section {
-    max-width: 265px;
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    margin: 50px auto;
+.graph__section {
     color: white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #222;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    position: relative;
 }
 
-.graph-section input {
-    margin: 5px;
-    padding: 5px;
-    width: 100px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-.graph-section button {
-    margin: 5px;
-    padding: 7px 12px;
-    border-radius: 5px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.graph-section button:hover {
-    background-color: #0056b3;
-}

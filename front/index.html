@@ -11,15 +11,17 @@
     </head>
     <body >
         <div class="calculator" x-data="calculator()">
+            <template x-if="!showGraph">
             <div class="calculator__display">
                 <div class="calculator__result" x-text="mode === 'graph' ? displayLabel : result"></div>
                 <div class="calculator__input" x-text="currentInput"></div>
                 <div class="calculator__status" x-text="mode"></div>
             </div>
+            </template>
             <template x-if="showGraph">
-                <div style="margin-top: 20px;">
-                    <canvas id="graphCanvas" width="300" height="200"></canvas>
-                </div>
+                <div class="graph__section">
+                    <canvas id="graphCanvas" width="325" height="168"></canvas>
+                    <div id="interceptInfo" class="intercept__info" style="margin-top: 0.5rem; font-size: 0.9rem;"></div>                </div>
             </template>
             <template x-if="mode === 'calc'">
                 <div class="calculator__keys">
@@ -58,24 +60,30 @@
                     <button class="calculator__key--mode" @click="toggleMode()">
                         <img src="assets/loop.svg" alt="Mode" width="30" height="30" />
                     </button>
-                    <button class="calculator__key--function" @click="addGraphInput()">+</button>
-                    <button class="calculator__key--function" @click="drawGraph()">
-                        <img src="assets/line.svg" alt="Draw" width="30" height="30" />
-                    </button>
-                    <button class="calculator__key--function" @click="resetGraph()">
-                        <img src="assets/reset.svg" alt="Reset" width="30" height="30" />
-                    </button>
+                    <button class="calculator__key--function" @click="resetGraph()">AC</button>
+                    <button class="calculator__key--doublefunc" @click="toggleSign()">±</button>
+
+
                     <button @click="inputDigit('7')">7</button>
                     <button @click="inputDigit('8')">8</button>
                     <button class="calculator__key--double" @click="inputDigit('9')">9</button>
+                    
+
                     <button @click="inputDigit('4')">4</button>
                     <button @click="inputDigit('5')">5</button>
                     <button class="calculator__key--double" @click="inputDigit('6')">6</button>
+
+
                     <button @click="inputDigit('1')">1</button>
                     <button @click="inputDigit('2')">2</button>
-                    <button class="calculator__key--double" @click="inputDigit('3')">3</button>
+                    <button  @click="inputDigit('3')">3</button>
+                    <button class="calculator__key--operation" @click="addGraphInput()">+</button>
+                    
                     <button @click="inputDigit('0')">0</button>
-                    <button @click="inputDecimal()">.</button>
+                    <button class="calculator__key--double" @click="inputDecimal()">.</button>
+                    <button class="calculator__key--operation" @click="drawGraph()">
+                        <img src="assets/line.svg" alt="Draw" width="30" height="30" class="filter__white"/>
+                    </button>
                 </div>
             </template>
         </div>
